@@ -21,6 +21,10 @@ export let links: LinksFunction = () => {
   ];
 };
 
+// ** Note that there are two actions in this route, demoing the two different ways to upload a file is easier this way.
+// Form Action is for the standard Remix <Form />. Uppy Action is for the <UploadAvatar /> component.
+
+// Form Action
 type ActionData = {
   errorMsg?: string;
   imgSrc?: string;
@@ -29,20 +33,19 @@ type ActionData = {
 
 export const action: ActionFunction = async ({ request }) => {
   const uploadHandler: UploadHandler = async ({ name, stream }) => {
-    // if (name !== "img") {
-    //   stream.resume();
-    //   return;
-    // }
+    if (name !== "img") {
+      stream.resume();
+      return;
+    }
     const uploadedImage: any = await uploadImage(stream);
-    console.log("uploadedImage", uploadedImage);
-    return uploadedImage.url;
+    return uploadedImage.secure_url;
   };
 
   const formData = await unstable_parseMultipartFormData(
     request,
     uploadHandler
   );
-  const imgSrc = formData.get("file");
+  const imgSrc = formData.get("img");
   const imgDesc = formData.get("desc");
   if (!imgSrc) {
     return json({
@@ -55,11 +58,42 @@ export const action: ActionFunction = async ({ request }) => {
   });
 };
 
+// Uppy Action
+// type ActionData = {
+//   errorMsg?: string;
+//   imgSrc?: string;
+// };
+// export const action: ActionFunction = async ({ request }) => {
+//   const uploadHandler: UploadHandler = async ({ name, stream }) => {
+//     if (name !== "file") {
+//       stream.resume();
+//       return;
+//     }
+//     const uploadedImage: any = await uploadImage(stream);
+//     return uploadedImage.url;
+//   };
+
+//   const formData = await unstable_parseMultipartFormData(
+//     request,
+//     uploadHandler
+//   );
+//   const imgSrc = formData.get("file");
+//   if (!imgSrc) {
+//     return json({
+//       error: "something wrong",
+//     });
+//   }
+//   return json({
+//     imgSrc,
+//   });
+// };
+
 export default function Index() {
   const data = useActionData<ActionData>();
   console.log("action data", data);
   return (
     <>
+      {/* This form returns data in useActionData() to the client */}
       <Form method="post" encType="multipart/form-data">
         <label htmlFor="img-field">Image to upload</label>
         <input id="img-field" type="file" name="img" accept="image/*" />
@@ -68,6 +102,7 @@ export default function Index() {
         <button type="submit">upload to cloudinary</button>
       </Form>
       <div>___________________</div>
+      {/* This form doesn't return data in useActionData() to the client */}
       <UploadAvatar apiEndpoint="cloudinary-upload" />
       {data?.errorMsg && <h2>{data.errorMsg}</h2>}
       {data?.imgSrc && (
