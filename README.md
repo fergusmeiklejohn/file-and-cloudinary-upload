@@ -1,11 +1,13 @@
 # Upload images to cloudinary
 
-This is a simple example of using the remix buildin [uploadHandler](https://remix.run/docs/en/v1/api/remix#uploadhandler) and Form with multipart data to upload a file with the built-in local uploader and upload an image file to cloudinary with a custom uploader and display it.
+This is a simple example of a problem with the client receiving actionData or in fact any message from the server. I've also tested this with toast cookies session and it's the same: the cookie is read by the root loader but there is no javascript response on the client.
 
 The relevent files are:
 
 ```
 ├── app
+|   ├── components
+|   |   ├── uploadAvatar.js
 │   ├── routes
 │   │   ├── cloudinary-upload.tsx // upload to cloudinary
 │   │   └── local-upload.tsx // local upload using build in [createfileuploadhandler](https://remix.run/docs/en/v1/api/remix#unstable_createfileuploadhandler)
@@ -13,16 +15,6 @@ The relevent files are:
 │       └── utils.server.ts  // init cloudinary nodejs client on server side
 |── .env // holds cloudinary credentails
 ```
-
-## Steps to set up cloudinary
-
-- sign up a free [cloudinary account](https://cloudinary.com/)
-- get the cloudname, api key and api secret from dashboard
-- copy the .env.sample to .env and populate the credentials
-
-Open this example on [CodeSandbox](https://codesandbox.com):
-
-[![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/remix-run/remix/tree/main/examples/file-and-cloudinary-upload)
 
 ## Related Links
 

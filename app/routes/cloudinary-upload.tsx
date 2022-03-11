@@ -11,7 +11,7 @@ import UppyCore from "@uppy/core/dist/style.min.css";
 import UppyDashboard from "@uppy/dashboard/dist/style.min.css";
 import UppyImageEditor from "@uppy/image-editor/dist/style.min.css";
 import { uploadImage } from "~/utils/utils.server";
-import UploadAvatar from "~/components/upLoadAvatar";
+import UploadAvatar from "~/components/uploadAvatar";
 
 export let links: LinksFunction = () => {
   return [
@@ -22,9 +22,7 @@ export let links: LinksFunction = () => {
 };
 
 // ** Note that there are two actions in this route, demoing the two different ways to upload a file is easier this way.
-// Form Action is for the standard Remix <Form />. Uppy Action is for the <UploadAvatar /> component.
 
-// Form Action
 type ActionData = {
   errorMsg?: string;
   imgSrc?: string;
@@ -57,36 +55,6 @@ export const action: ActionFunction = async ({ request }) => {
     imgDesc,
   });
 };
-
-// Uppy Action
-// type ActionData = {
-//   errorMsg?: string;
-//   imgSrc?: string;
-// };
-// export const action: ActionFunction = async ({ request }) => {
-//   const uploadHandler: UploadHandler = async ({ name, stream }) => {
-//     if (name !== "file") {
-//       stream.resume();
-//       return;
-//     }
-//     const uploadedImage: any = await uploadImage(stream);
-//     return uploadedImage.url;
-//   };
-
-//   const formData = await unstable_parseMultipartFormData(
-//     request,
-//     uploadHandler
-//   );
-//   const imgSrc = formData.get("file");
-//   if (!imgSrc) {
-//     return json({
-//       error: "something wrong",
-//     });
-//   }
-//   return json({
-//     imgSrc,
-//   });
-// };
 
 export default function Index() {
   const data = useActionData<ActionData>();

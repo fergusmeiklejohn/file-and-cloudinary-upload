@@ -23,6 +23,7 @@ export default function UploadAvatar(props: Props) {
     })
       .use(XHRUpload, {
         endpoint: `/${apiEndpoint}`,
+        fieldName: "img",
       })
       .use(ImageEditor, {
         id: "ImageEditor",
@@ -55,6 +56,12 @@ export default function UploadAvatar(props: Props) {
         },
       });
   });
+  uppy.on("upload-success", (file, response) => {
+    const httpStatus = response.status; // HTTP status code
+    const httpBody = response.body; // extracted response data
+    console.log("response from uppy", response);
+    // do something with file and response
+  });
 
   return (
     <>
@@ -75,28 +82,3 @@ export default function UploadAvatar(props: Props) {
     </>
   );
 }
-
-// Cloudflare Images responses
-//
-// example success response
-// response {
-//      result: {
-//        id: '1f9246fa-3761-4398-d99f-837b9ebd3700',
-//        filename: 'The White House.jpg',
-//        uploaded: '2022-03-09T10:16:25.130Z',
-//        requireSignedURLs: false,
-//        variants: [
-//          ...
-//        ]
-//      },
-//      result_info: null,
-//      success: true,
-//      errors: [],
-//      messages: []
-//    }
-
-// example failure response
-//  response: {
-//        success: false,
-//        errors: [ { code: 10000, message: 'Authentication error' } ]
-//      }
