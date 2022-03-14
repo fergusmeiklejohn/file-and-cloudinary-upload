@@ -21,8 +21,6 @@ export let links: LinksFunction = () => {
   ];
 };
 
-// ** Note that there are two actions in this route, demoing the two different ways to upload a file is easier this way.
-
 type ActionData = {
   errorMsg?: string;
   imgSrc?: string;
